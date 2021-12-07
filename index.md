@@ -116,3 +116,25 @@ Pour appeler une donnée dans une fonction particulière, seul les variables `JD
 for j in JDict['joueurs']:
   JDict['joueurs'][j]['scores'] = 0
 ```
+
+### Les fonctions de jeu
+
+Le fonctionnement du jeu repose sur différentes fonctions créées dans le programme `blackjack.py`. Mise à part les fonctions de déroulement de jeu, elles servent à tout ce qui est gestion du jeu et calcul de différentes variables et données.
+
+- `initPioche(n)` initialise une pioche composée de n paquets de 52 cartes, n étant le nombre de joueurs dans la partie. La pioche est mélangée avant d'être renvoyée grâce à la fonction `shuffle(pioche)`.
+
+- `initJoueurs(JDict, n)` initialise les joueurs et une partie des données le concernant dans le dictionnaire `JDict['joueurs']`. La fonction demande à l'utilisateur : le nom du joueur, son type, et sa stratégie de jeu.
+
+- `initScores(JDict, valeur, v=0)` est une fonction multi-usage qui est utilisée pour initialiser notamment les scores, les mises et les portefeuilles des joueurs. Le paramètre `v` est la valeur initialisée (par ex : 0 pour les scores ou 100 pour les portefeuilles)
+
+ - `initVictoires(JDict)` est une fonction similaire à la précédente qui ne marche que pour les victoires
+
+ - `valeurCartes(carte, score)` se base sur la chaine de caractère de la carte piochée et un dictionnaire de valeurs pour renvoyer la valeur entière de la carte
+
+ - `valeurAs(score)` prend en compte le score du joueur et renvoie 1 si le score est trop haut ou 11 si le score est inférieur ou égal à 10
+
+ - `piocheCarte(p, x=1)` prend la première carte de la liste `pioche`, la supprime de la pioche et la renvoie
+
+ - `gagnant(JDict)` détermine le vainqueur de la partie en se basant sur les scores des joueurs et du croupier. Cette fonction correspond essentiellement à une fonction `max()` revisitée
+
+ - `partieFinie(GDict, JDict)` renvoie un booléen indiquant si la partie est terminée ou non, donc si il reste des joueurs en jeu ou non
