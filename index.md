@@ -110,4 +110,9 @@ Les données joueurs sont :
 
 À noter que le dictionnaire `victoires` n'est pas dans le dictionnaire du joueur : cela permet de potentiellement exporter le dictionnaire dans un fichier et pouvoir ré afficher le compte de victoires au nouveau lancement du programme.
 
-### 
+Pour appeler une donnée dans une fonction particulière, seul les variables `JDict` et `GDict` sont nécessaires dans les paramètres. Une donnée s'appelle comme suit : `JDict['joueurs'][indexDuJoueur][cléDeLaDonnée]`. Les propriétés du dictionnaire permettent donc d'accéder facilement à toutes les données et d'être accédé via une boucle for, par ex :
+
+```py
+for j in JDict['joueurs']:
+  JDict['joueurs'][j]['scores'] = 0
+```
