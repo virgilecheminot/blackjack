@@ -32,7 +32,7 @@ Le jeu de Blackjack est un jeu assez simple en soi, donc sa réalisation est plu
     - **Tour joueur :** (× nb de joueurs encore en jeu)
       - Affiche nom du joueur
       - Affiche main du joueur
-      - Propose de continuer
+      - Propose de continuer à piocher
         - si non : statut "en jeu" du joueur faux → sortir
       - Pioche une carte et lit sa valeur
       - Rajouter valeur de la carte
@@ -59,5 +59,55 @@ Les différentes parties distinctes du jeu sont exécutées avec les fonctions s
 
 - `PremierTour()` : réalise le premier tour
 - `partieComplete()` : exécute en boucle la fonction `tourComplet()`
-| `tourComplet()` : éxecute en boucle la fonction `tourJoueur()` puis le tour du croupier
+- `tourComplet()` : éxecute en boucle la fonction `tourJoueur()` puis le tour du croupier
 
+### Structure des données de jeu
+
+L'enjeu majeur de ce programme était de savoir comment stocker les données de jeu et poucoir y accéder facilement avant, durant et après la partie et pouvoir les modifier le plus facilement possible. Pour cela nous avons décidé de nous tourner vers les dictionnaires. Ne pouvant pas utiliser les classes et les objets, les dictionnaires semblaient être la meilleur alternative.
+
+Nous avons donc décidé de séparer les données en deux dictionnaires : `GDict` où sont stockées toutes les données liées au jeu en lui-même, par exemple la pioche, l'état de la partie (terminée ou pas), etc. ainsi que `JDict` où sont toutes les informations liées aux joueurs et au croupier, comme le score actuel, ne nombre de victoires, la mise, etc.
+
+Les dictionnaires prennent la forme suivante :
+
+```py
+GDict = {
+    'nbtour': 0,
+    'pioche': [],
+    'partieFinie': False
+}
+
+JDict = {
+    'joueurs': {
+        0: {
+            'nom': 'NomJoueur',
+            'type': 0,
+            'score': 0,
+            'wallet': 100,
+            'mise': 0,
+            'ingame': True
+        },
+    },
+    'croupier': {
+        'score': 0,
+        'wallet': 100,
+        'mise': 0,
+        'ingame': True
+    },
+    'victoires': {}
+}
+```
+
+Les informations liées au joueur comme le score ne sont pas stockées dans un dictionnaire pour chaque, mais dans le dictionnaire personnel du joueur. Cela rallonge quelque peu l'écriture du code mais offre une bien plus grande flexibilité dans l'ajout futur de nouvelles informations.
+
+Les données joueurs sont :
+
+- `nom` : stocke le nom du joueur car la clé du dictionnaire n'est pas le nom mais un index (plus facile pour le déroulement du jeu)
+- `type` : stocke le type du joueur : soit humain (0), soit ordinateur (1)
+- `score` : stocke le score courant du joueur
+- `wallet` : stocke le portefeuille du joueur (initialisé à 100)
+- `mise` : stocke la mise courante du joueur
+- `ingame` : booléen définissant si le joueur est encore dans la partie et continue à piocher ou non
+
+À noter que le dictionnaire `victoires` n'est pas dans le dictionnaire du joueur : cela permet de potentiellement exporter le dictionnaire dans un fichier et pouvoir ré afficher le compte de victoires au nouveau lancement du programme.
+
+### 
