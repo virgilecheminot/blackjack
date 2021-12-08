@@ -28,25 +28,24 @@ Le jeu de Blackjack est un jeu assez simple en soi, donc sa réalisation est plu
     - Affiche nom du joueur
     - Affiche main du joueur
     - Choix de la mise en fonction de la stratégie choisie
-  - **Tour global :** (tant que tous les joueurs sont en jeux ou pas de victoire)
-    - **Tour joueur :** (× nb de joueurs encore en jeu)
-      - Affiche nom du joueur
-      - Affiche main du joueur
+  - **Tour global :** (× nb de joueurs en jeu)
+    - Affiche nom du joueur
+    - Affiche main du joueur
+    - **Tour joueur :** (tant que je joueur pioche)
       - Propose de continuer à piocher
         - si non : statut "en jeu" du joueur faux → sortir
       - Pioche une carte et lit sa valeur
       - Rajouter valeur de la carte
         - si > 21 → défaite : retirer joueur des scores et de la liste
-        - si = 21 → victoire : fin de la partie
         - si < 21 → continuer
-    - **Tour ordinateur :**
+    - **Tour ordinateur :** (tant que le joueur pioche)
       - Choix de continuer ou pas en fonction de la stratégie de jeu
       - Même processus que joueur normal
-    - Vérifier la victoire
-  - Si pas de gagnant : comparaison des scores
-    - Si égalité : ajouter une victoire pour tout le monde
-  - Répartition des mises en fonction des scores et du vainqueur
-  - Afficher le vainqueur
+  - **Tour du croupier :**
+    - Tour similaire à un joueur      
+  - Vérifier la victoire
+  - Répartition des mises en fonction des scores
+  - Afficher les vainqueurs
   - Demander pour une nouvelle partie
     - Si oui : demander à chaque joueur humain s'il veut quitter la partie
 
@@ -58,8 +57,8 @@ Le jeu de Blackjack est un jeu assez simple en soi, donc sa réalisation est plu
 Les différentes parties distinctes du jeu sont exécutées avec les fonctions suivantes :
 
 - `PremierTour()` : réalise le premier tour
-- `partieComplete()` : exécute en boucle la fonction `tourComplet()`
-- `tourComplet()` : éxecute en boucle la fonction `tourJoueur()` puis le tour du croupier
+- `partieComplete()` : exécute la fonction `tourComplet()` et le tour du croupier
+- `tourComplet()` : éxecute en boucle la fonction `tourJoueur()` pour chaque joueur
 
 ### Structure des données de jeu
 
@@ -177,6 +176,20 @@ def continueClassic(score):
         return False
 ```
 ### Stratégie de choix de la mise
+
+Le fonctionnement des mises demandé ne correspond pas du tout au fonctionnement des mises du Blackjack classique, faisant jouer les joueurs contre eux et non contre le croupier. C'est pourquoi nous avons décidé de revoir le système avec les règles suivantes :
+
+- Le croupier ne mise pas et comme il représente le casino, il a une ressource "infinie" d'OtterCoins
+
+- Si le joueur dépasse, il perd sa mise instantanément sa mise qui va au croupier
+
+- Si le joueur fait blackjack en un coup, il gagne 1,5 fois sa mise, sauf si le croupier fait aussi blackjack en un coup, au quel cas le joueur est payé à égalité
+
+- Si le joueur a une main supérieure au croupier, il est payé à égalité, c'est à dire qu'il récupère sa mise et gagne la valeur de sa mise
+
+- Si le croupier dépasse, il paye toutes les mains encore en jeu à égalité
+
+- Si le joueur est a égalité avec le croupier, la main est considérée comme nulle et le joueur récupère juste sa mise
 
 De même que les stratégie de pioche, les stratégies de mises peuvent être choisies au moment de l'inscription du joueur ordinateur dans le dictionnaire. Elles déterminenent donc combien d'OtterCoins le joueur va miser en fonction de différents critères.
 
