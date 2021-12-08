@@ -19,15 +19,15 @@ Le jeu de Blackjack est un jeu assez simple en soi, donc sa réalisation est plu
   - Scores initialisés à 0 avec la liste des joueurs de base
   - Création de pioche avec nb joueurs × paquet
   - **Premier tour :** (× nb de joueurs)
+    - Demande la mise au joueur (si portefeuille non vide)
     - Création de la main initiale des joueurs (2 cartes) & main du croupier
     - Ajout de la main aux scores
     - Affiche nom du joueur
     - Affiche main du joueur
-    - Demande la mise au joueur (si portefeuille non vide)
   - **Premier tour ordinateur :**
+    - Choix de la mise en fonction de la stratégie choisie
     - Affiche nom du joueur
     - Affiche main du joueur
-    - Choix de la mise en fonction de la stratégie choisie
   - **Tour global :** (× nb de joueurs en jeu)
     - Affiche nom du joueur
     - Affiche main du joueur
@@ -36,7 +36,7 @@ Le jeu de Blackjack est un jeu assez simple en soi, donc sa réalisation est plu
         - si non : statut "en jeu" du joueur faux → sortir
       - Pioche une carte et lit sa valeur
       - Rajouter valeur de la carte
-        - si > 21 → défaite : retirer joueur des scores et de la liste
+        - si > 21 → défaite : statut "en jeu" faux
         - si < 21 → continuer
     - **Tour ordinateur :** (tant que le joueur pioche)
       - Choix de continuer ou pas en fonction de la stratégie de jeu
@@ -57,40 +57,38 @@ Le jeu de Blackjack est un jeu assez simple en soi, donc sa réalisation est plu
 Les différentes parties distinctes du jeu sont exécutées avec les fonctions suivantes :
 
 - `PremierTour()` : réalise le premier tour
-- `partieComplete()` : exécute la fonction `tourComplet()` et le tour du croupier
-- `tourComplet()` : éxecute en boucle la fonction `tourJoueur()` pour chaque joueur
+- `partieComplete()` : exécute la fonction `tourComplet()` puis gère la répartition des mises
+- `tourComplet()` : éxecute en boucle la fonction `tourJoueur()` pour chaque joueur puis éxecute le tour du croupier
 
 ### Structure des données de jeu
 
 L'enjeu majeur de ce programme était de savoir comment stocker les données de jeu et poucoir y accéder facilement avant, durant et après la partie et pouvoir les modifier le plus facilement possible. Pour cela nous avons décidé de nous tourner vers les dictionnaires. Ne pouvant pas utiliser les classes et les objets, les dictionnaires semblaient être la meilleur alternative.
 
-Nous avons donc décidé de séparer les données en deux dictionnaires : `GDict` où sont stockées toutes les données liées au jeu en lui-même, par exemple la pioche, l'état de la partie (terminée ou pas), etc. ainsi que `JDict` où sont toutes les informations liées aux joueurs et au croupier, comme le score actuel, ne nombre de victoires, la mise, etc.
+Nous avons donc décidé de rassembler les données en un seul dictionnaire : `GDict` où sont stockées toutes les données liées au jeu en lui-même, par exemple la pioche, l'état de la partie (terminée ou pas), etc. ainsi que toutes les informations liées aux joueurs et au croupier, comme le score actuel, ne nombre de victoires, la mise, etc.
 
-Les dictionnaires prennent la forme suivante :
+Le dictionnaire prend la forme suivante :
 
 ```py
 GDict = {
-    'nbtour': 0,
     'pioche': [],
-    'partieFinie': False
-}
-
-JDict = {
     'joueurs': {
         0: {
-            'nom': 'NomJoueur',
+            'nom': '',
             'type': 0,
             'score': 0,
             'wallet': 100,
             'mise': 0,
-            'ingame': True
+            'ingame': True,
+            'blackjack': False,
+            'burst': False
         },
     },
     'croupier': {
         'score': 0,
-        'wallet': 100,
-        'mise': 0,
-        'ingame': True
+        'wallet': 0,
+        'ingame': True,
+        'blackjack': False,
+        'burst': False
     },
     'victoires': {}
 }
@@ -106,6 +104,8 @@ Les données joueurs sont :
 - `wallet` : stocke le portefeuille du joueur (initialisé à 100)
 - `mise` : stocke la mise courante du joueur
 - `ingame` : booléen définissant si le joueur est encore dans la partie et continue à piocher ou non
+- `blackjack` : booléen définissant si le joueur a effectué un Blackjack au premier tour (utile pour la répartition des mises)
+- `burst` : booléen définissant si le joueur a dépassé ou non le score de 21
 
 À noter que le dictionnaire `victoires` n'est pas dans le dictionnaire du joueur : cela permet de potentiellement exporter le dictionnaire dans un fichier et pouvoir ré afficher le compte de victoires au nouveau lancement du programme.
 
