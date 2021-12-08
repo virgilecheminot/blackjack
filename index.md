@@ -136,46 +136,55 @@ Le fonctionnement du jeu repose sur différentes fonctions créées dans le prog
 
 - `gagnant(GDict)` détermine les joueurs qui ne perdent pas leur mise à la fin de la partie en cours et renvoie une liste avec les indexs des joueurs.
 
-- `gain(j, GDict)` est une fonction composée d'une série de `if` qui se base sur les règles du jeu pour mettre à jour le portefeuille des joueurs en fonction de leur score (voir la section [Stratégie de choix de la mise](#mises))
+- `gain(j, GDict)` est une fonction composée d'une série de `if` qui se base sur les règles du jeu pour mettre à jour le portefeuille des joueurs en fonction de leur score (voir la section [Stratégies de choix de la mise](#mises))
 
-### Stratégie de pioche
+### Stratégies de pioche
 
 Les stratégies de pioches sont utilisées pour les joueurs ordinateur ou pour le croupier. Ce sont en fait des fonctions qui déterminent si le joueur doit continuer à piocher ou non, basé sur certains critères. 
 
-- `continueHuman()` est la fonction de base qui interagie avec le joueur pour lui demander s'il veut continuer à piocher ou pas
+- `continueHuman(j, GDict)` est la fonction de base qui interagie avec le joueur pour lui demander s'il veut continuer à piocher ou pas
 
-- `continueAlea()` ne prend aucun critère en compte et donne juste au hasard une réponse positive ou négative avec une probabilité de 0.5. C'est la forme la moins "intelligente" des fonctions de choix :
+- `continueAlea(j,GDict)` ne prend aucun critère en compte et donne juste au hasard une réponse positive ou négative avec une probabilité de 0.5. C'est la forme la moins "intelligente" des fonctions de choix :
 ```py
-def continueAlea():
-    return choice([False, True])
+def continueAlea(j,GDict):
+    if choice([False, True]):
+        GDict['joueurs'][j]['ingame'] = True
+    else:
+        GDict['joueurs'][j]['ingame'] = False
+        print(GDict['joueurs'][j]['nom'], "ne pioche pas")
 ```
 
-- `continuePara(p=0.5)` est similaire à la fonction précédente, mais les choix ont une probabilité différente (même si la probabilité par défaut est 0.5, ce qui revient à exactement la fonction précédente). Ce choix pondéré est effectué grâce au module numpy.random :
+- `continuePara(j,GDict,p=0.5)` est similaire à la fonction précédente, mais les choix ont une probabilité différente (même si la probabilité par défaut est 0.5, ce qui revient à exactement la fonction précédente). Ce choix pondéré est effectué grâce au module numpy.random :
 ```py
-def continuePara(p=0.5):
-    return nprd.choice([False, True], p=[1-p, p])
+def continuePara(j,GDict,p=0.5):
+    if nprd.choice([False, True], p=[1-p, p]):
+        GDict['joueurs'][j]['ingame'] = True
+    else:
+        GDict['joueurs'][j]['ingame'] = False
+        print(GDict['joueurs'][j]['nom'], "ne pioche pas")
 ```
 
-- `continueIntel()` se base sur le score du joueur pour en tirer une probabilité qui est en suite injectée dans `continuePara(p)`. C'est la technique la plus "complexe" car elle rassemble le plus de paramètres, mais ça n'es pas forcément la plus logique ni la meilleure stratégie :
+- `continueIntel(j,GDict,p=0.5)` se base sur le score du joueur pour en tirer une probabilité qui est en suite injectée dans `continuePara()`. C'est la technique la plus "complexe" car elle rassemble le plus de paramètres, mais ça n'es pas forcément la plus logique ni la meilleure stratégie :
 ```py
-def continueIntel(score):
-    if score <= 10:
+def continueIntel(j,GDict):
+    if GDict['joueurs'][j]['score'] <= 10:
         p = 1
-    elif score < 21:
-        p = 1-((score-11)/10)
+    elif GDict['joueurs'][j]['score'] < 21:
+        p = 1-((GDict['joueurs'][j]['score']-11)/10)
     else:
         p = 0
-    return continuePara(p)
+    continuePara(j,GDict,p)
 ```
-- `continueClassic(score)` est la méthode utilisée dans la plupart des casinos quand il s'agit de faire piocher le croupier. Tant que son score est inférieur à 17, le croupier continue à piocher, sinon il s'arrête :
+- `continueCroupier(GDict)` est la méthode utilisée dans la plupart des casinos quand il s'agit de faire piocher le croupier. Tant que son score est inférieur à 17, le croupier continue à piocher, sinon il s'arrête :
 ```py
-def continueClassic(score):
-    if score < 17:
-        return True
+def continueCroupier(GDict):
+    if GDict['croupier']['score'] < 17:
+        GDict['croupier']['ingame'] = True
     else:
-        return False
+        GDict['croupier']['ingame'] = False
+        print("\nLe croupier ne pioche pas")
 ```
-### <a name="mises"></a> Stratégie de choix de la mise
+### <a name="mises"></a> Stratégies de choix de la mise
 
 Le fonctionnement des mises demandé ne correspond pas du tout au fonctionnement des mises du Blackjack classique, faisant jouer les joueurs contre eux et non contre le croupier. C'est pourquoi nous avons décidé de revoir le système avec les règles suivantes :
 
