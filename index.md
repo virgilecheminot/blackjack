@@ -136,7 +136,7 @@ Le fonctionnement du jeu repose sur différentes fonctions créées dans le prog
 
 - `gagnant(GDict)` détermine les joueurs qui ne perdent pas leur mise à la fin de la partie en cours et renvoie une liste avec les indexs des joueurs.
 
-- `gain(j, GDict)` est une fonction composée d'une série de `if` qui se base sur les règles du jeu pour mettre à jour le portefeuille des joueurs en fonction de leur score (voir la section [Stratégie de choix de la mise](#Stratégie-de-choix-de-la-mise))
+- `gain(j, GDict)` est une fonction composée d'une série de `if` qui se base sur les règles du jeu pour mettre à jour le portefeuille des joueurs en fonction de leur score (voir la section [Stratégie de choix de la mise](#mises))
 
 ### Stratégie de pioche
 
@@ -175,7 +175,7 @@ def continueClassic(score):
     else:
         return False
 ```
-### Stratégie de choix de la mise
+### <a name="mises"></a> Stratégie de choix de la mise
 
 Le fonctionnement des mises demandé ne correspond pas du tout au fonctionnement des mises du Blackjack classique, faisant jouer les joueurs contre eux et non contre le croupier. C'est pourquoi nous avons décidé de revoir le système avec les règles suivantes :
 
