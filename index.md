@@ -114,7 +114,7 @@ Pour appeler une donnée dans une fonction particulière, seul les variables `JD
 
 ```py
 for j in JDict['joueurs']:
-  JDict['joueurs'][j]['scores'] = 0
+    JDict['joueurs'][j]['scores'] = 0
 ```
 
 ### Les fonctions de jeu
@@ -148,33 +148,33 @@ Les stratégies de pioches sont utilisées pour les joueurs ordinateur ou pour l
 - `continueAlea()` ne prend aucun critère en compte et donne juste au hasard une réponse positive ou négative avec une probabilité de 0.5. C'est la forme la moins "intelligente" des fonctions de choix :
 ```py
 def continueAlea():
-  return choice([False, True])
+    return choice([False, True])
 ```
 
 - `continuePara(p=0.5)` est similaire à la fonction précédente, mais les choix ont une probabilité différente (même si la probabilité par défaut est 0.5, ce qui revient à exactement la fonction précédente). Ce choix pondéré est effectué grâce au module numpy.random :
 ```py
 def continuePara(p=0.5):
-  return nprd.choice([False, True], p=[1-p, p])
+    return nprd.choice([False, True], p=[1-p, p])
 ```
 
 - `continueIntel()` se base sur le score du joueur pour en tirer une probabilité qui est en suite injectée dans `continuePara(p)`. C'est la technique la plus "complexe" car elle rassemble le plus de paramètres, mais ça n'es pas forcément la plus logique ni la meilleure stratégie :
 ```py
 def continueIntel(score):
-  if score <= 10:
-    p = 1
-  elif score < 21:
-    p = 1-((score-11)/10)
-  else:
-    p = 0
-  return continuePara(p)
+    if score <= 10:
+        p = 1
+    elif score < 21:
+        p = 1-((score-11)/10)
+    else:
+        p = 0
+    return continuePara(p)
 ```
 - `continueClassic(score)` est la méthode utilisée dans la plupart des casinos quand il s'agit de faire piocher le croupier. Tant que son score est inférieur à 17, le croupier continue à piocher, sinon il s'arrête :
 ```py
 def continueClassic(score):
-  if score < 17:
-    return True
-  else:
-    return False
+    if score < 17:
+        return True
+    else:
+        return False
 ```
 ### Stratégie de choix de la mise
 
@@ -183,13 +183,13 @@ De même que les stratégie de pioche, les stratégies de mises peuvent être ch
 - `choixMise(score)` se base sur le score du joueur et mise un pourcentage du portefeuille en fonction de ce dernier. Si le score du joueur après le premier tour est trop bas, le pourcentage va être faible, s'il se raproche de 10 ou 11, et donc du la possibilité de faire blackjack, le pourcentage est élevé :
 ```py
 def choixMise(score):
-  if score <= 10:
-    p = score/10
-  elif score < 21:
-    p = 1-((score-11)/10)
-  elif score == 21:
-    p = 1
-  return p
+    if score <= 10:
+        p = score/10
+    elif score < 21:
+        p = 1-((score-11)/10)
+    elif score == 21:
+        p = 1
+    return p
 ```
 
 ### Tournoi automatique et comparaison des stratégies
