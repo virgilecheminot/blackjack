@@ -109,11 +109,11 @@ Les données joueurs sont :
 
 À noter que le dictionnaire `victoires` n'est pas dans le dictionnaire du joueur : cela permet de potentiellement exporter le dictionnaire dans un fichier et pouvoir ré afficher le compte de victoires au nouveau lancement du programme.
 
-Pour appeler une donnée dans une fonction particulière, seul les variables `JDict` et `GDict` sont nécessaires dans les paramètres. Une donnée s'appelle comme suit : `JDict['joueurs'][indexDuJoueur][cléDeLaDonnée]`. Les propriétés du dictionnaire permettent donc d'accéder facilement à toutes les données et d'être accédé via une boucle for, par ex :
+Pour appeler une donnée dans une fonction particulière, seul les variables `GDict` et `GDict` sont nécessaires dans les paramètres. Une donnée s'appelle comme suit : `GDict['joueurs'][indexDuJoueur][cléDeLaDonnée]`. Les propriétés du dictionnaire permettent donc d'accéder facilement à toutes les données et d'être accédé via une boucle for, par ex :
 
 ```py
-for j in JDict['joueurs']:
-    JDict['joueurs'][j]['scores'] = 0
+for j in GDict['joueurs']:
+    GDict['joueurs'][j]['scores'] = 0
 ```
 
 ### Les fonctions de jeu
@@ -122,21 +122,21 @@ Le fonctionnement du jeu repose sur différentes fonctions créées dans le prog
 
 - `initPioche(n)` initialise une pioche composée de n paquets de 52 cartes, n étant le nombre de joueurs dans la partie. La pioche est mélangée avant d'être renvoyée grâce à la fonction `shuffle(pioche)`.
 
-- `initJoueurs(JDict, n)` initialise les joueurs et une partie des données le concernant dans le dictionnaire `JDict['joueurs']`. La fonction demande à l'utilisateur : le nom du joueur, son type, et sa stratégie de jeu.
+- `initJoueurs(GDict, n)` initialise les joueurs et une partie des données le concernant dans le dictionnaire `GDict['joueurs']`. La fonction demande à l'utilisateur : le nom du joueur, son type, et sa stratégie de jeu.
 
-- `initScores(JDict, valeur, v=0)` est une fonction multi-usage qui est utilisée pour initialiser notamment les scores, les mises et les portefeuilles des joueurs. Le paramètre `v` est la valeur initialisée (par ex : 0 pour les scores ou 100 pour les portefeuilles)
+- `initData(GDict, valeur, v=0)` est une fonction multi-usage qui est utilisée pour initialiser notamment les scores, les mises et les portefeuilles des joueurs. Le paramètre `v` est la valeur initialisée (par ex : 0 pour les scores ou 100 pour les portefeuilles).
 
- - `initVictoires(JDict)` est une fonction similaire à la précédente qui ne marche que pour les victoires
+- `initVictoires(GDict)` est une fonction similaire à la précédente qui ne marche que pour les victoires, comme elles sont dans un dictionnaire à part.
 
- - `valeurCartes(carte, score)` se base sur la chaine de caractère de la carte piochée et un dictionnaire de valeurs pour renvoyer la valeur entière de la carte
+- `valeurCartes(carte, score)` se base sur la chaine de caractère de la carte piochée et un dictionnaire de valeurs pour renvoyer la valeur entière de la carte.
 
- - `valeurAs(score)` prend en compte le score du joueur et renvoie 1 si le score est trop haut ou 11 si le score est inférieur ou égal à 10
+- `valeurAs(score)` prend en compte le score du joueur et renvoie 1 si le score est trop haut ou 11 si le score est inférieur ou égal à 10.
 
- - `piocheCarte(p, x=1)` prend la première carte de la liste `pioche`, la supprime de la pioche et la renvoie
+- `piocheCarte(p, x=1)` prend la première carte de la liste `pioche`, la supprime de la pioche et la renvoie. Le paramètre `x` détermine le nombre de cartes à piocher.
 
- - `gagnant(JDict)` détermine le vainqueur de la partie en se basant sur les scores des joueurs et du croupier. Cette fonction correspond essentiellement à une fonction `max()` revisitée
+- `gagnant(GDict)` détermine les joueurs qui ne perdent pas leur mise à la fin de la partie en cours et renvoie une liste avec les indexs des joueurs.
 
- - `partieFinie(GDict, JDict)` renvoie un booléen indiquant si la partie est terminée ou non, donc si il reste des joueurs en jeu ou non
+- `gain(j, GDict)` est une fonction composée d'une série de `if` qui se base sur les règles du jeu pour mettre à jour le portefeuille des joueurs en fonction de leur score (voir la section [Stratégie de choix de la mise](#Stratégie-de-choix-de-la-mise))
 
 ### Stratégie de pioche
 
