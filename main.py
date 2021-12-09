@@ -38,8 +38,8 @@ initData(GDict, 'wallet')
 
 # PARTIE COMPLETE
 
-nbIter = 100
-while rejouer:
+nbIter = 1000
+for i in range(nbIter):
     initData(GDict, 'score')
     GDict['pioche'] = initPioche(nbjoueurs+1)
     initData(GDict, 'mise')
