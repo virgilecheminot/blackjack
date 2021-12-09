@@ -4,7 +4,17 @@ Ce jeu de Blackjack est un travail de groupe réalisé pour l'université dans l
 
 Lors de la création du programme nous avons ajouté progressivements certaines fonctionnalités que nous allons détailler ici. La structure choisie a été de créer un fichier [`blackjack.py`](https://github.com/virgilecheminot/blackjack/blob/master/blackjack.py) pour stocker toutes les fonctions de jeu et un autre [`main.py`](https://github.com/virgilecheminot/blackjack/blob/master/main.py) pour les exécuter dans l'ordre.
 
-### Déroulement de base du jeu
+### Table des matières
+
+- #### [Déroulement de base du jeu](#deroulement)
+- #### [Structure des données de jeu](#structure)
+- #### [Les fonctions de jeu](#fonctions)
+- #### [Stratégies de pioche](#pioche)
+- #### [Stratégies de choix de la mise](#mises)
+- #### [Tournoi automatique et comparaison des stratégies](#statistiques)
+- #### [Interface graphique du jeu](#interface)
+
+### <a name="deroulement"></a> Déroulement de base du jeu
 
 Le jeu de Blackjack est un jeu assez simple en soi, donc sa réalisation est plutôt simple à traduire en code. En simplifiant les règles du jeu officiel, nous en avons tiré un déroulement de jeu à peu près similaire à ceci :
 
@@ -60,7 +70,7 @@ Les différentes parties distinctes du jeu sont exécutées avec les fonctions s
 - `partieComplete()` : exécute la fonction `tourComplet()` puis gère la répartition des mises
 - `tourComplet()` : éxecute en boucle la fonction `tourJoueur()` pour chaque joueur puis éxecute le tour du croupier
 
-### Structure des données de jeu
+### <a name="structure"></a> Structure des données de jeu
 
 L'enjeu majeur de ce programme était de savoir comment stocker les données de jeu et poucoir y accéder facilement avant, durant et après la partie et pouvoir les modifier le plus facilement possible. Pour cela nous avons décidé de nous tourner vers les dictionnaires. Ne pouvant pas utiliser les classes et les objets, les dictionnaires semblaient être la meilleur alternative.
 
@@ -116,7 +126,7 @@ for j in GDict['joueurs']:
     GDict['joueurs'][j]['scores'] = 0
 ```
 
-### Les fonctions de jeu
+### <a name="fonctions"></a> Les fonctions de jeu
 
 Le fonctionnement du jeu repose sur différentes fonctions créées dans le programme `blackjack.py`. Mise à part les fonctions de déroulement de jeu, elles servent à tout ce qui est gestion du jeu et calcul de différentes variables et données.
 
@@ -138,7 +148,7 @@ Le fonctionnement du jeu repose sur différentes fonctions créées dans le prog
 
 - `gain(j, GDict)` est une fonction composée d'une série de `if` qui se base sur les règles du jeu pour mettre à jour le portefeuille des joueurs en fonction de leur score (voir la section [Stratégies de choix de la mise](#mises))
 
-### Stratégies de pioche
+### <a name="pioche"></a> Stratégies de pioche
 
 Les stratégies de pioches sont utilisées pour les joueurs ordinateur ou pour le croupier. Ce sont en fait des fonctions qui déterminent si le joueur doit continuer à piocher ou non, basé sur certains critères. 
 
@@ -211,6 +221,7 @@ def continueCroupDifficile(j, GDict):
         GDict['joueurs'][j]['ingame'] = False
         print(GDict['joueurs'][j]['nom'], "ne pioche pas")
 ```
+
 ### <a name="mises"></a> Stratégies de choix de la mise
 
 Le fonctionnement des mises demandé ne correspond pas du tout au fonctionnement des mises du Blackjack classique, faisant jouer les joueurs contre eux et non contre le croupier. C'est pourquoi nous avons décidé de revoir le système avec les règles suivantes :
@@ -251,7 +262,7 @@ def miseForte(j,GDict) :
     return mise
 ```
 
-### Tournoi automatique et comparaison des stratégies
+### <a name="statistiques"></a> Tournoi automatique et comparaison des stratégies
 
 Nous allons à présent étudier différentes possibilités de jeux, afin de voir quelle(s) stratégie(s) de mises et/ou de pioches sont les meilleurs pour gagner face au croupier. Pour procéder à cela, nous avons créé une nouvelle branche du jeu (se trouvant [ici](https://github.com/virgilecheminot/blackjack/tree/stats)). Le programme a été complètement simplifié en enlevant tous les affichages console et les interractions avec l'utilisateur, et en enlevant le code concernant les joueurs humains.
 
@@ -268,6 +279,6 @@ Au contraire, la stratégie `risk` qui consiste à continuer à piocher huit foi
 
 On remarque aussi, que qu'importe la stratégie, le gain est toujours négatif et donc le casino s'en sort toujours avec un gain positif.
 
-### Interface graphique du jeu
+### <a name="interface"></a> Interface graphique du jeu
 
 (à venir)
