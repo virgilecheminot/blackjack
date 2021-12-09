@@ -29,27 +29,16 @@ GDict = {
     'victoires': {}
 }
 
-
-while True:
-    try:
-        nbjoueurs = int(input('Nombre de joueurs : '))
-    except:
-        print("Entrez une valeur correcte")
-        continue
-    if nbjoueurs <= 0:
-        continue
-    else:
-        break
-
+nbjoueurs = len(GDict['stratlist'])
 initJoueurs(GDict, nbjoueurs)
 # AJOUTER CHOIX DE STRATÉGIES DE JEU
 initVictoires(GDict)
-initData(GDict, 'wallet', 100)
+initData(GDict, 'wallet')
 
 
 # PARTIE COMPLETE
 
-rejouer = True
+nbIter = 100
 while rejouer:
     initData(GDict, 'score')
     GDict['pioche'] = initPioche(nbjoueurs+1)
@@ -62,22 +51,6 @@ while rejouer:
 
     premierTour(GDict)
     partieComplete(GDict)
-
-    while True:
-        rep = input("Voulez vous lancer une nouvelle partie ? (o/n)")
-        if rep != 'o' and rep != 'n':
-            continue
-        else:
-            break
-
-    if rep == 'o':
-        rejouer = True
-    else:
-        rejouer = False
-    if rejouer:
-        voulezVousPartir(GDict)
-        if len(GDict['joueurs']) == 0:
-            rejouer = False
 
 print("Résumé des victoires :")
 for j in GDict['victoires']:

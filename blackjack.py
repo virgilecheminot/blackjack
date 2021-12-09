@@ -52,32 +52,9 @@ def initPioche(n):
 def initJoueurs(GDict, n):
     for i in range(n):
         GDict['joueurs'][i] = {}
-        GDict['joueurs'][i]['nom'] = input('Nom du joueur '+str(i+1)+' : ')
-        while True:
-            try:
-                typ = int(input('Humain (0) ou ordinateur (1) : '))
-            except:
-                print("Entrez une valeur correcte")
-                continue
-            if typ != 0 and typ != 1:
-                print("Entrez une valeur correcte")
-                continue
-            else:
-                break
-        GDict['joueurs'][i]['type'] = typ
-        if typ:
-            print("Choix de la straégie joueur")
-            print(GDict['stratlist'])
-            for s in GDict['stratlist']:
-                while True:
-                    strat = input(s+" (o/n) : ")
-                    if strat != 'o' and strat != 'n':
-                        continue
-                    else:
-                        break
-                if strat == 'o':
-                    GDict['joueurs'][i]['strat'] = s
-                    break
+        GDict['joueurs'][i]['nom'] = GDict['stratlist'][i]
+        GDict['joueurs'][i]['type'] = 1
+        GDict['joueurs'][i]['strat'] = GDict['stratlist'][i]
         GDict['joueurs'][i]['ingame'] = True
         GDict['joueurs'][i]['blackjack'] = False
         GDict['joueurs'][i]['burst'] = False
@@ -173,23 +150,11 @@ def gain(j, GDict):
 
 ## CHOIX DE PIOCHER ##
 
-def continueHuman(j, GDict):
-    c = ''
-    while c != 'o' and c != 'n':
-        c = str(input('Piocher ? (o/n) : '))
-    if c == 'o':
-        GDict['joueurs'][j]['ingame'] = True
-    else:
-        GDict['joueurs'][j]['ingame'] = False
-        print(GDict['joueurs'][j]['nom'], "ne pioche pas")
-
-
 def continueAlea(j, GDict):
     if choice([False, True]):
         GDict['joueurs'][j]['ingame'] = True
     else:
         GDict['joueurs'][j]['ingame'] = False
-        print(GDict['joueurs'][j]['nom'], "ne pioche pas")
 
 
 def continuePara(j, GDict, p=0.5):
@@ -197,7 +162,6 @@ def continuePara(j, GDict, p=0.5):
         GDict['joueurs'][j]['ingame'] = True
     else:
         GDict['joueurs'][j]['ingame'] = False
-        print(GDict['joueurs'][j]['nom'], "ne pioche pas")
 
 
 def continueIntel(j, GDict):
@@ -214,28 +178,24 @@ def continueCroupLike(j, GDict):
         GDict['joueurs'][j]['ingame'] = True
     else:
         GDict['joueurs'][j]['ingame'] = False
-        print(GDict['joueurs'][j]['nom'], "ne pioche pas")
 
 def continueCroupier(GDict):
     if GDict['croupier']['score'] < 17:
         GDict['croupier']['ingame'] = True
     else:
         GDict['croupier']['ingame'] = False
-        print("\nLe croupier ne pioche pas")
 
 def continueCroupier2(GDict) :
     if GDict['croupier']['score'] < 15 : 
         GDict['croupier']['ingame'] = True
     else : 
         GDict['croupier']['ingame'] = False
-        print("\nLe croupier ne pioche pas")
 
 def continueCroupier3(GDict) :
     if GDict['croupier']['score'] < 19 : 
         GDict['croupier']['ingame'] = True
     else : 
         GDict['croupier']['ingame'] = False
-        print("\nLe croupier ne pioche pas")
 
 def selectContinue(j, GDict):
     strat = GDict['joueurs'][j]['strat']
@@ -261,68 +221,24 @@ def miseAlea(j, Gdict):
 ## FONCTIONS DE DÉROULEMENT ##
 
 def premierTour(GDict):
-    print("\n\nPremier tour:")
-    usrToDel = []
     for i in GDict['joueurs']:
-
-        if GDict['joueurs'][i]['ingame'] and not GDict['joueurs'][i]['type']:
-            print("\nJoueur :", GDict['joueurs'][i]['nom'])
-            if GDict['joueurs'][i]['wallet'] <= 0:
-                print("Vous n'avez plus d'OtterCoins, vous ne pouvez plus jouer")
-                usrToDel.append(i)
-            else:
-                print(
-                    f"Combien voulez-vous miser ? ({GDict['joueurs'][i]['wallet']} OtterCoins restants) : ", end='')
-                while True:
-                    try:
-                        mise = int(input())
-                    except:
-                        print("Entrez une valeur correcte")
-                        continue
-                    if mise > GDict['joueurs'][i]['wallet']:
-                        print("Vous devez miser une valeur ≤ à votre portefeuille")
-                    else:
-                        break
-                GDict['joueurs'][i]['wallet'] -= mise
-                GDict['joueurs'][i]['mise'] += mise
+        if GDict['joueurs'][i]['ingame'] and GDict['joueurs'][i]['type']:
+            mise = 10
+            GDict['joueurs'][i]['wallet'] -= mise
+            GDict['joueurs'][i]['mise'] += mise
             cartes2 = piocheCarte(GDict['pioche'], 2)
-            print("Main du joueur :", cartes2)
             for j in cartes2:
                 GDict['joueurs'][i]['score'] += valeurCartes(
                     j, GDict['joueurs'][i]['score'])
-            print("Score actuel :", GDict['joueurs'][i]['score'])
             if GDict['joueurs'][i]['score'] == 21:
                 GDict['joueurs'][i]['blackjack'] = True
                 GDict['joueurs'][i]['ingame'] = False
-
-        elif GDict['joueurs'][i]['ingame'] and GDict['joueurs'][i]['type']:
-            print("\nJoueur :", GDict['joueurs'][i]['nom'])
-            if GDict['joueurs'][i]['wallet'] <= 0:
-                usrToDel.append(i)
-            else:
-                mise = miseAlea(i, GDict)
-                GDict['joueurs'][i]['wallet'] -= mise
-                GDict['joueurs'][i]['mise'] += mise
-                print(GDict['joueurs'][i]['nom'], "mise", mise, "OtterCoins")
-            cartes2 = piocheCarte(GDict['pioche'], 2)
-            print("Main du joueur :", cartes2)
-            for j in cartes2:
-                GDict['joueurs'][i]['score'] += valeurCartes(
-                    j, GDict['joueurs'][i]['score'])
-            print("Score actuel :", GDict['joueurs'][i]['score'])
-            if GDict['joueurs'][i]['score'] == 21:
-                GDict['joueurs'][i]['blackjack'] = True
-                GDict['joueurs'][i]['ingame'] = False
-
-    for i in usrToDel:
-        del GDict['joueurs'][i]
 
     if GDict['croupier']['ingame']:
         cartes2 = piocheCarte(GDict['pioche'], 2)
         for j in cartes2:
             GDict['croupier']['score'] += valeurCartes(
                 j, GDict['croupier']['score'])
-        print("\nScore du croupier :", GDict['croupier']['score'])
         if GDict['croupier']['score'] == 21:
             GDict['croupier']['blackjack'] = True
             GDict['croupier']['ingame'] = False
@@ -330,39 +246,15 @@ def premierTour(GDict):
 
 def tourJoueur(j, GDict):
 
-    if GDict['joueurs'][j]['ingame'] and not GDict['joueurs'][j]['type']:
-
-        print("\nJoueur :", GDict['joueurs'][j]['nom'])
-        print('Score partie :', GDict['joueurs'][j]['score'])
-        continueHuman(j, GDict)
-        while GDict['joueurs'][j]['ingame']:
-            carte = piocheCarte(GDict['pioche'])[0]
-            val = valeurCartes(carte, GDict['joueurs'][j]['score'])
-            print("Vous avez pioché :", carte, "(valeur : "+str(val)+")")
-            GDict['joueurs'][j]['score'] += val
-            print("Votre score est donc de :", GDict['joueurs'][j]['score'])
-            if GDict['joueurs'][j]['score'] == 21:
-                GDict['joueurs'][j]['ingame'] = False
-            elif GDict['joueurs'][j]['score'] > 21:
-                print("Vous avez dépassé 21 ! Perdu !")
-                GDict['joueurs'][j]['ingame'] = False
-                GDict['joueurs'][j]['burst'] = True
-            else:
-                continueHuman(j, GDict)
-
-    elif GDict['joueurs'][j]['ingame'] and GDict['joueurs'][j]['type']:
-        print("\nJoueur :", GDict['joueurs'][j]['nom'])
-        print('Score partie: ', GDict['joueurs'][j]['score'])
+    if GDict['joueurs'][j]['ingame'] and GDict['joueurs'][j]['type']:
         selectContinue(j, GDict)
         while GDict['joueurs'][j]['ingame']:
             carte = piocheCarte(GDict['pioche'])[0]
             val = valeurCartes(carte, GDict['joueurs'][j]['score'])
             GDict['joueurs'][j]['score'] += val
-            print("Nouveau score :", GDict['joueurs'][j]['score'])
             if GDict['joueurs'][j]['score'] == 21:
                 GDict['joueurs'][j]['ingame'] = False
             elif GDict['joueurs'][j]['score'] > 21:
-                print(GDict['joueurs'][j]['nom'], "a dépassé 21 ! Perdu !")
                 GDict['joueurs'][j]['ingame'] = False
                 GDict['joueurs'][j]['burst'] = True
             else:
@@ -370,7 +262,6 @@ def tourJoueur(j, GDict):
 
 
 def tourComplet(GDict):
-    print()
     for j in GDict['joueurs']:
         tourJoueur(j, GDict)
     continueCroupier(GDict)
@@ -378,11 +269,9 @@ def tourComplet(GDict):
         carte = piocheCarte(GDict['pioche'])[0]
         val = valeurCartes(carte, GDict['croupier']['score'])
         GDict['croupier']['score'] += val
-        print("\nScore du croupier :", GDict['croupier']['score'])
         if GDict['croupier']['score'] == 21:
             GDict['croupier']['ingame'] = False
         elif GDict['croupier']['score'] > 21:
-            print("Le croupier a dépassé !")
             GDict['croupier']['ingame'] = False
             GDict['croupier']['burst'] = True
         else:
@@ -391,20 +280,15 @@ def tourComplet(GDict):
 
 def partieComplete(GDict):
     tourComplet(GDict)
-
-    print("\n\nPartie terminée")
     victorieux = gagnants(GDict)
 
     for j in GDict['joueurs']:
         gain(j, GDict)
 
     print("Résumé de la partie :")
-    usrToDel = []
     for j in GDict['joueurs']:
-        if GDict['joueurs'][j]['wallet'] < 1:
-            usrToDel.append(j)
-        GDict['victoires'][GDict['joueurs'][j]['nom']] += 1
         if j in victorieux:
+            GDict['victoires'][GDict['joueurs'][j]['nom']] += 1
             print("-", GDict['joueurs'][j]['nom'], ":", GDict['joueurs'][j]
                   ['score'], "gagné →", GDict['joueurs'][j]['wallet'], "OtterCoins")
         else:
@@ -412,25 +296,3 @@ def partieComplete(GDict):
                   ['score'], "perdu →", GDict['joueurs'][j]['wallet'], "OtterCoins")
     print("- Croupier", GDict['croupier']['score'],
           "→", GDict['croupier']['wallet'], "OtterCoins")
-    for j in usrToDel:
-        del GDict['joueurs'][j]
-
-
-def voulezVousPartir(GDict):
-    print()
-    if len(GDict['joueurs']) <= 0:
-        print("Il n'y a plus de joueurs en jeu, vous ne pouvez rejoueur.")
-        return
-    else:
-        usrToDel = []
-        for j in GDict['joueurs']:
-            if not GDict['joueurs'][j]['type']:
-                strAff = GDict['joueurs'][j]['nom'] + \
-                    ", voulez vous partir ? (o/n) "
-                rep = ''
-                while rep != 'o' and rep != 'n':
-                    rep = input(strAff)
-                if rep == 'o':
-                    usrToDel.append(j)
-        for j in usrToDel:
-            del GDict['joueurs'][j]
