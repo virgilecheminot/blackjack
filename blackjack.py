@@ -221,6 +221,7 @@ def selectContinue(j, GDict):
         continueCroupDifficile(j, GDict)
 
 
+
 ## FONCTIONS DE DÉROULEMENT ##
 
 def premierTour(GDict):
