@@ -24,6 +24,7 @@ def paquet():
         'roi de trefle', 'roi de carreau', 'roi de coeur', 'roi de pic'
     ]
 
+
 ValCartes = {
     '2': 2,
     '3': 3,
@@ -173,11 +174,13 @@ def continueIntel(j, GDict):
         p = 0
     continuePara(j, GDict, p)
 
+
 def continueCroupNormal(j, GDict):
     if GDict['joueurs'][j]['score'] < 17:
         GDict['joueurs'][j]['ingame'] = True
     else:
         GDict['joueurs'][j]['ingame'] = False
+
 
 def continueCroupier(GDict):
     if GDict['croupier']['score'] < 17:
@@ -185,17 +188,20 @@ def continueCroupier(GDict):
     else:
         GDict['croupier']['ingame'] = False
 
+
 def continueCroupFacile(j, GDict):
     if GDict['joueurs'][j]['score'] < 15:
         GDict['joueurs'][j]['ingame'] = True
     else:
         GDict['joueurs'][j]['ingame'] = False
 
+
 def continueCroupDifficile(j, GDict):
     if GDict['joueurs'][j]['score'] < 19:
         GDict['joueurs'][j]['ingame'] = True
     else:
         GDict['joueurs'][j]['ingame'] = False
+
 
 def selectContinue(j, GDict):
     strat = GDict['joueurs'][j]['strat']
@@ -213,13 +219,6 @@ def selectContinue(j, GDict):
         continueCroupFacile(j, GDict)
     elif strat == 'croupDiff':
         continueCroupDifficile(j, GDict)
-       
-
-
-## CHOIX DE MISE ##
-
-def miseAlea(j, Gdict):
-    return randint(1, floor(Gdict['joueurs'][j]['wallet']))
 
 
 ## FONCTIONS DE DÉROULEMENT ##

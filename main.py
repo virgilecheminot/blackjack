@@ -5,12 +5,12 @@ from blackjack import *
 
 GDict = {
     'pioche': [],
-    'stratlist':['alea', 'risk', 'safe', 'intel', 'croupNormal', 'croupFacile', 'croupDiff'],
+    'stratlist': ['alea', 'risk', 'safe', 'intel', 'croupNormal', 'croupFacile', 'croupDiff'],
     'joueurs': {
         0: {
             'nom': 'nomJoueur',
             'type': 0,
-            'strat':'strategie',
+            'strat': 'strategie',
             'score': 0,
             'wallet': 100,
             'mise': 0,
@@ -40,6 +40,7 @@ initData(GDict, 'wallet')
 
 nbIter = 10000
 print()
+avancement = 0
 for i in range(nbIter):
     initData(GDict, 'score')
     GDict['pioche'] = initPioche(nbjoueurs+1)
@@ -52,12 +53,15 @@ for i in range(nbIter):
 
     premierTour(GDict)
     partieComplete(GDict)
-    print ("\033[A                             \033[A")
-    avancement = int(((i+1)/nbIter)*30)
-    print('█'*avancement+'░'*(30-avancement))
+    if int(((i+1)/nbIter)*30) != 0:
+        avancement = int(((i+1)/nbIter)*30)
+        # print("\033[A                                \033[A")
+        print('|'+'█'*avancement+'-'*(30-avancement)+'| '+str(round((i/nbIter)*100,1))+'%',end='\r')
 
-print("Résumé des victoires :")
+# print("\033[A                             \033[A")
+print("Résumé des victoires :                 ")
 for j in GDict['joueurs']:
-    print("-", GDict['joueurs'][j]['nom'], ":", GDict['victoires'][GDict['joueurs'][j]['nom']],"gain :",GDict['joueurs'][j]['wallet'])
+    print("-", GDict['joueurs'][j]['nom'], ":", GDict['victoires']
+          [GDict['joueurs'][j]['nom']], "gain :", GDict['joueurs'][j]['wallet'])
 
 print("Vous avez terminé, le jeu va maintenant se fermer.")
