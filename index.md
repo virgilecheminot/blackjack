@@ -193,10 +193,10 @@ def continueCroupNormal(j, GDict):
         GDict['joueurs'][j]['ingame'] = False
         print(GDict['joueurs'][j]['nom'], "ne pioche pas")
 ```
-- `continueCroupFacile(j,GDict)` est la fonction qui definit un joueur qui ne pioche que quand sa main a une valeur strictement inférieure à 15. C'est donc un moyen simple et sécurisé de piocher :
+- `continueCroupFacile(j,GDict)` est la fonction qui definit un joueur qui ne pioche que quand sa main a une valeur strictement inférieure à 16. C'est donc un moyen simple et sécurisé de piocher :
 ```py
 def continueCroupFacile(j, GDict):
-    if GDict['joueurs'][j]['score'] < 15:
+    if GDict['joueurs'][j]['score'] < 16:
         GDict['joueurs'][j]['ingame'] = True
     else:
         GDict['joueurs'][j]['ingame'] = False
@@ -262,10 +262,8 @@ On utilise ensuite le module matplotlib pour tracer des graphiques avec les vale
 ![Graphique des gains](https://raw.githubusercontent.com/virgilecheminot/blackjack/stats/GainGraph.png) 
 ![Histogramme des Victoires](https://raw.githubusercontent.com/virgilecheminot/blackjack/stats/WinStrat.png)
 
-On remarque que la stratégie de jeu la plus efficace est finalement celle similaire à celle du croupier, avec un score d'arrêt légèrement plus faible. Cependant, dans certains autres tests, c'est la stratégie `croupNormal` qui l'emportait de peu. La stratégie `risk` qui consiste à continuer à piocher huit fois sur 10 est la pire, car c'est celle qui fait que le joueur dépasse le plus souvent.
-
-Si on effectue une régression linéaire sur chacune des courbes de gains, on obtient la pente de la courbe et donc le gain moyen :
-- 
+On remarque que la stratégie de jeu la plus efficace est finalement `croupFacile`, similaire à celle du croupier, avec un score d'arrêt légèrement plus faible. Cependant, dans certains autres tests, c'est la stratégie `croupNormal` qui l'emportait de peu. C'est donc une de ces stratégies qu'il faudrait choisir, car en plus de cela, le taux de victoire est supérieur à 50%.
+Au contraire, la stratégie `risk` qui consiste à continuer à piocher huit fois sur 10 est la pire, car c'est celle qui fait que le joueur dépasse le plus souvent.
 
 On remarque aussi, que qu'importe la stratégie, le gain est toujours négatif et donc le casino s'en sort toujours avec un gain positif.
 
