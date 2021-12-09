@@ -1,4 +1,5 @@
 from blackjack import *
+import matplotlib.pyplot as plt
 
 
 # INITIALISATION
@@ -35,6 +36,7 @@ initJoueurs(GDict, nbjoueurs)
 initVictoires(GDict)
 initData(GDict, 'wallet')
 
+gains = [[] for i in range(nbjoueurs)]
 
 # PARTIE COMPLETE
 
@@ -53,6 +55,10 @@ for i in range(nbIter):
 
     premierTour(GDict)
     partieComplete(GDict)
+
+    for j in GDict['joueurs']:
+        gains[j].append(GDict['joueurs'][j]['wallet'])
+
     if int(((i+1)/nbIter)*30) != 0:
         avancement = int(((i+1)/nbIter)*30)
         # print("\033[A                                \033[A")
@@ -64,4 +70,27 @@ for j in GDict['joueurs']:
     print("-", GDict['joueurs'][j]['nom'], ":", GDict['victoires']
           [GDict['joueurs'][j]['nom']], "gain :", GDict['joueurs'][j]['wallet'])
 
+
+fig = plt.figure(dpi=300,figsize=(7,4))
+sub1 = fig.add_subplot(1,1,1)
+
+for i in range(len(gains)):
+    sub1.plot(gains[i],label=str(GDict['joueurs'][i]['nom']))
+sub1.legend()
+sub1.grid(True)
+sub1.show
+sub1.clf()
+
+# vic = []
+# lose = []
+# nom = []
+# for i in GDict['victoires']:
+#     nom.append(i)
+#     vic.append(GDict['victoires'][i])
+#     lose.append(nbIter - GDict['victoires'][i])
+
+# ax = fig.add_axes([0,0,1,1])
+# ax.bar(nom,vic,0.5)
+# plt.grid(True,'both','y')
+# plt.show()
 print("Vous avez terminé, le jeu va maintenant se fermer.")
