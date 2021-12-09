@@ -175,7 +175,7 @@ def continueIntel(j,GDict):
         p = 0
     continuePara(j,GDict,p)
 ```
-- `continueCroupier(GDict)` est la méthode utilisée dans la plupart des casinos quand il s'agit de faire piocher le croupier. Tant que son score est inférieur à 17, le croupier continue à piocher, sinon il s'arrête :
+- `continueCroupier(GDict)` est la méthode utilisée dans la plupart des casinos quand il s'agit de faire piocher le croupier. Tant que son score est inférieur à 17, le croupier continue à piocher, sinon il s'arrête. C'est la méthode imposée au croupier de notre programme :
 ```py
 def continueCroupier(GDict):
     if GDict['croupier']['score'] < 17:
@@ -193,16 +193,16 @@ def continueCroupNormal(j, GDict):
         GDict['joueurs'][j]['ingame'] = False
         print(GDict['joueurs'][j]['nom'], "ne pioche pas")
 ```
-- `continueCroupFacil(j,GDict)`est la fonction qui definit un joueur qui ne pioche au dessus d'une certaine valeur de main:
+- `continueCroupFacile(j,GDict)` est la fonction qui definit un joueur qui ne pioche que quand sa main a une valeur strictement inférieure à 15. C'est donc un moyen simple et sécurisé de piocher :
 ```py
-def continueCroupFacil(j, GDict):
+def continueCroupFacile(j, GDict):
     if GDict['joueurs'][j]['score'] < 15:
         GDict['joueurs'][j]['ingame'] = True
     else:
         GDict['joueurs'][j]['ingame'] = False
         print(GDict['joueurs'][j]['nom'], "ne pioche pas")
 ```
-- `continueCroupDifficile(j,GDict)`fonctionne comme celle au dessus mais avec un nombre de main plus grand avant d'arreter de piocher :
+- `continueCroupDifficile(j,GDict)` fonctionne comme celle au dessus mais avec une valeur de main plus élevée avant d'arrêter de piocher. C'est plus risqué mais paut parfois permettre de vaincre le croupier :
 ```py
 def continueCroupDifficile(j, GDict):
     if GDict['joueurs'][j]['score'] < 19:
@@ -229,23 +229,12 @@ Le fonctionnement des mises demandé ne correspond pas du tout au fonctionnement
 
 De même que les stratégie de pioche, les stratégies de mises peuvent être choisies au moment de l'inscription du joueur ordinateur dans le dictionnaire. Elles déterminenent donc combien d'OtterCoins le joueur va miser en fonction de différents critères.
 
-- `choixMise(score)` se base sur le score du joueur et mise un pourcentage du portefeuille en fonction de ce dernier. Si le score du joueur après le premier tour est trop bas, le pourcentage va être faible, s'il se raproche de 10 ou 11, et donc du la possibilité de faire blackjack, le pourcentage est élevé :
-```py
-def choixMise(score):
-    if score <= 10:
-        p = score/10
-    elif score < 21:
-        p = 1-((score-11)/10)
-    elif score == 21:
-        p = 1
-    return p
-```
-- `miseAlea(score)` effectue un choix de la mise aléatoirement entre 1 et le portefeuille du joueur :
+- `miseAlea(j, Gdict)` effectue un choix de la mise aléatoirement entre 1 et le portefeuille du joueur :
 ```py
 def miseAlea(j, Gdict):
     return randint(1, floor(Gdict['joueurs'][j]['wallet']))
 ```
-- `miseFaible(score)` effectue un choix de la mise dite "Faible", car il effectue son choix afin qu'elle soit inférieur au quart du portefeuille du joueur :
+- `miseFaible(j, Gdict)` effectue un choix de la mise dite "Faible", car il effectue son choix afin qu'elle soit inférieur au quart du portefeuille du joueur :
 ```py
 def miseFaible(j,GDict):
     mise = randint(1 ,floor(GDict['joueurs'][j]['wallet']))
@@ -253,7 +242,7 @@ def miseFaible(j,GDict):
         mise = randint(1 ,floor(GDict['joueurs'][j]['wallet']))
     return mise
 ```
-- `miseAlea(score)` effectue un choix de la mise dite "Forte", car il effectue son choix afin qu'elle soit supérieure au trois quart du portefeuille du joueur :
+- `miseAlea(j, Gdict)` effectue un choix de la mise dite "Forte", car il effectue son choix afin qu'elle soit supérieure au trois quart du portefeuille du joueur :
 ```py
 def miseForte(j,GDict) :
     mise = randint(1 ,floor(GDict['joueurs'][j]['wallet']))
@@ -264,8 +253,20 @@ def miseForte(j,GDict) :
 
 ### Tournoi automatique et comparaison des stratégies
 
-Nous allons à présent étudier différentes possibilités de jeux, afin de voir quelle(s) stratégie(s) de mises et/ou de pioches sont les meilleurs pour gagner face au croupier.
+Nous allons à présent étudier différentes possibilités de jeux, afin de voir quelle(s) stratégie(s) de mises et/ou de pioches sont les meilleurs pour gagner face au croupier. Pour procéder à cela, nous avons créé une nouvelle branche du jeu (se trouvant [ici](https://github.com/virgilecheminot/blackjack/tree/stats)). Le programme a été complètement simplifié en enlevant tous les affichages console et les interractions avec l'utilisateur, et en enlevant le code concernant les joueurs humains.
 
-(partie à venir)
+Afin de tester toutes les stratégies, le programme principal créé un joueur ordinateur par stratégie et effectue un nombre n de parties affin de comparer le nombre de victoires et les gains pour chaques stratégies.
+
+On utilise ensuite le module matplotlib pour tracer des graphiques avec les valeurs obtenues. On notera le nombre de victoires sous forme d'un histograme et les gains sous forme d'un graphique évoluant à chaque partie effectuée. On effectue 10 000 parties d'affilées pour avoir un résultat se rapprochant le plus possible de la probabilité de réussite de la stratégie.
+
+![Graphique des gains](https://raw.githubusercontent.com/virgilecheminot/blackjack/stats/GainGraph.png) 
+![Histogramme des Victoires](https://raw.githubusercontent.com/virgilecheminot/blackjack/stats/WinStrat.png)
+
+On remarque que la stratégie de jeu la plus efficace est finalement celle similaire à celle du croupier, avec un score d'arrêt légèrement plus faible. Cependant, dans certains autres tests, c'est la stratégie `croupNormal` qui l'emportait de peu. La stratégie `risk` qui consiste à continuer à piocher huit fois sur 10 est la pire, car c'est celle qui fait que le joueur dépasse le plus souvent.
+
+Si on effectue une régression linéaire sur chacune des courbes de gains, on obtient la pente de la courbe et donc le gain moyen :
+- 
+
+On remarque aussi, que qu'importe la stratégie, le gain est toujours négatif et donc le casino s'en sort toujours avec un gain positif.
 
 ### Interface graphique du jeu 
