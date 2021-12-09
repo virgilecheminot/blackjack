@@ -77,23 +77,25 @@ sub1 = fig1.add_subplot(1,1,1)
 for i in range(len(gains)):
     sub1.plot(gains[i],label=str(GDict['joueurs'][i]['nom']))
 sub1.legend()
+plt.xlabel('Parties')
+plt.ylabel('Gain (OtterCoins)')
 sub1.grid(True)
 
-fig1.savefig('GainGraph.png')
+plt.savefig('GainGraph.png')
+
 
 fig2 = plt.figure(dpi=120,figsize=(7,4))
 fig2.patch.set_facecolor('white')
-plt.subplots_adjust(bottom=0.15)
+plt.subplots_adjust(bottom=0.2)
 vic = []
-lose = []
 nom = []
 for i in GDict['victoires']:
     nom.append(i)
-    vic.append(GDict['victoires'][i])
-    lose.append(nbIter - GDict['victoires'][i])
-
+    vic.append((GDict['victoires'][i]/nbIter)*100)
 plt.bar(nom,vic,0.7)
 plt.xticks(rotation='20')
+plt.xlabel('Stratégies')
+plt.ylabel('Pourcentage de victoires')
 plt.grid(True,'both','y')
 
 plt.savefig('WinStrat.png')
