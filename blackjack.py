@@ -190,14 +190,12 @@ def continueCroupFacile(j, GDict):
         GDict['joueurs'][j]['ingame'] = True
     else:
         GDict['joueurs'][j]['ingame'] = False
-        print(GDict['joueurs'][j]['nom'], "ne pioche pas")
 
 def continueCroupDifficile(j, GDict):
     if GDict['joueurs'][j]['score'] < 19:
         GDict['joueurs'][j]['ingame'] = True
     else:
         GDict['joueurs'][j]['ingame'] = False
-        print(GDict['joueurs'][j]['nom'], "ne pioche pas")
 
 def selectContinue(j, GDict):
     strat = GDict['joueurs'][j]['strat']
@@ -287,18 +285,8 @@ def tourComplet(GDict):
 def partieComplete(GDict):
     tourComplet(GDict)
     victorieux = gagnants(GDict)
-
     for j in GDict['joueurs']:
         gain(j, GDict)
-
-    print("Résumé de la partie :")
     for j in GDict['joueurs']:
         if j in victorieux:
             GDict['victoires'][GDict['joueurs'][j]['nom']] += 1
-            print("-", GDict['joueurs'][j]['nom'], ":", GDict['joueurs'][j]
-                  ['score'], "gagné →", GDict['joueurs'][j]['wallet'], "OtterCoins")
-        else:
-            print("-", GDict['joueurs'][j]['nom'], ":", GDict['joueurs'][j]
-                  ['score'], "perdu →", GDict['joueurs'][j]['wallet'], "OtterCoins")
-    print("- Croupier", GDict['croupier']['score'],
-          "→", GDict['croupier']['wallet'], "OtterCoins")
