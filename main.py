@@ -71,26 +71,32 @@ for j in GDict['joueurs']:
           [GDict['joueurs'][j]['nom']], "gain :", GDict['joueurs'][j]['wallet'])
 
 
-fig = plt.figure(dpi=300,figsize=(7,4))
-sub1 = fig.add_subplot(1,1,1)
-
+fig1 = plt.figure(dpi=120,figsize=(7,4))
+fig1.patch.set_facecolor('white')
+sub1 = fig1.add_subplot(1,1,1)
 for i in range(len(gains)):
     sub1.plot(gains[i],label=str(GDict['joueurs'][i]['nom']))
 sub1.legend()
 sub1.grid(True)
-sub1.show
-sub1.clf()
 
-# vic = []
-# lose = []
-# nom = []
-# for i in GDict['victoires']:
-#     nom.append(i)
-#     vic.append(GDict['victoires'][i])
-#     lose.append(nbIter - GDict['victoires'][i])
+fig1.savefig('GainGraph.png')
 
-# ax = fig.add_axes([0,0,1,1])
-# ax.bar(nom,vic,0.5)
-# plt.grid(True,'both','y')
-# plt.show()
+fig2 = plt.figure(dpi=120,figsize=(7,4))
+fig2.patch.set_facecolor('white')
+plt.subplots_adjust(bottom=0.15)
+vic = []
+lose = []
+nom = []
+for i in GDict['victoires']:
+    nom.append(i)
+    vic.append(GDict['victoires'][i])
+    lose.append(nbIter - GDict['victoires'][i])
+
+plt.bar(nom,vic,0.7)
+plt.xticks(rotation='20')
+plt.grid(True,'both','y')
+
+plt.savefig('WinStrat.png')
+
+
 print("Vous avez terminé, le jeu va maintenant se fermer.")

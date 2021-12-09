@@ -190,7 +190,7 @@ def continueCroupier(GDict):
 
 
 def continueCroupFacile(j, GDict):
-    if GDict['joueurs'][j]['score'] < 15:
+    if GDict['joueurs'][j]['score'] < 16:
         GDict['joueurs'][j]['ingame'] = True
     else:
         GDict['joueurs'][j]['ingame'] = False
