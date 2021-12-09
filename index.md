@@ -8,6 +8,7 @@ Lors de la création du programme nous avons ajouté progressivements certaines 
 
 - #### [Déroulement de base du jeu](#deroulement)
 - #### [Structure des données de jeu](#structure)
+- #### [Filtration des inputs](#filtration)
 - #### [Les fonctions de jeu](#fonctions)
 - #### [Stratégies de pioche](#pioche)
 - #### [Stratégies de choix de la mise](#mises)
@@ -16,75 +17,79 @@ Lors de la création du programme nous avons ajouté progressivements certaines 
 
 ### <a name="deroulement"></a> Déroulement de base du jeu
 
-Le jeu de Blackjack est un jeu assez simple en soi, donc sa réalisation est plutôt simple à traduire en code. En simplifiant les règles du jeu officiel, nous en avons tiré un déroulement de jeu à peu près similaire à ceci :
+Le jeu de Blackjack est un jeu assez simple en soi, donc sa réalisation est plutôt simple à traduire en code. En simplifiant les règles du jeu officiel, nous en avons tiré un déroulement de jeu à peu près similaire à ceci :
 
-- **Initialisation** :
+- **Initialisation** :
   - Demande du nombre de joueurs
   - Création de la liste des joueurs
   - Choix du type de joueur (humain ou ordinateur)
   - Choix des stratégies de jeu des joueurs ordinateurs
   - Création du portefeuille de chaque joueur à 100 OtterCoins
 
-- **Partie complète :** (tant que rejouer vrai)
+- **Partie complète :** (tant que rejouer vrai)
   - Scores initialisés à 0 avec la liste des joueurs de base
   - Création de pioche avec nb joueurs × paquet
-  - **Premier tour :** (× nb de joueurs)
+  - **Premier tour :** (× nb de joueurs)
     - Demande la mise au joueur (si portefeuille non vide)
     - Création de la main initiale des joueurs (2 cartes) & main du croupier
     - Ajout de la main aux scores
     - Affiche nom du joueur
     - Affiche main du joueur
-  - **Premier tour ordinateur :**
+  - **Premier tour ordinateur :**
     - Choix de la mise en fonction de la stratégie choisie
     - Affiche nom du joueur
     - Affiche main du joueur
-  - **Tour global :** (× nb de joueurs en jeu)
+  - **Tour global :** (× nb de joueurs en jeu)
     - Affiche nom du joueur
     - Affiche main du joueur
-    - **Tour joueur :** (tant que je joueur pioche)
+    - **Tour joueur :** (tant que je joueur pioche)
       - Propose de continuer à piocher
-        - si non : statut "en jeu" du joueur faux → sortir
+        - si non : statut "en jeu" du joueur faux → sortir
       - Pioche une carte et lit sa valeur
       - Rajouter valeur de la carte
-        - si > 21 → défaite : statut "en jeu" faux
+        - si > 21 → défaite : statut "en jeu" faux
         - si < 21 → continuer
-    - **Tour ordinateur :** (tant que le joueur pioche)
+    - **Tour ordinateur :** (tant que le joueur pioche)
       - Choix de continuer ou pas en fonction de la stratégie de jeu
       - Même processus que joueur normal
-  - **Tour du croupier :**
+  - **Tour du croupier :**
     - Tour similaire à un joueur      
   - Vérifier la victoire
   - Répartition des mises en fonction des scores
   - Afficher les vainqueurs
   - Demander pour une nouvelle partie
-    - Si oui : demander à chaque joueur humain s'il veut quitter la partie
+    - Si oui : demander à chaque joueur humain s'il veut quitter la partie
 
-- **Fin de partie :**
+- **Fin de partie :**
   - Afficher les victoires
   - Afficher les OtterCoins restants dans chaque portefeuille
 
 
-Les différentes parties distinctes du jeu sont exécutées avec les fonctions suivantes :
+Les différentes parties distinctes du jeu sont exécutées avec les fonctions suivantes :
 
-- `PremierTour()` : réalise le premier tour
-- `partieComplete()` : exécute la fonction `tourComplet()` puis gère la répartition des mises
-- `tourComplet()` : éxecute en boucle la fonction `tourJoueur()` pour chaque joueur puis éxecute le tour du croupier
+- `PremierTour()` : réalise le premier tour
+- `partieComplete()` : exécute la fonction `tourComplet()` puis gère la répartition des mises
+- `tourComplet()` : éxecute en boucle la fonction `tourJoueur()` pour chaque joueur puis éxecute le tour du croupier
 
 ### <a name="structure"></a> Structure des données de jeu
 
 L'enjeu majeur de ce programme était de savoir comment stocker les données de jeu et poucoir y accéder facilement avant, durant et après la partie et pouvoir les modifier le plus facilement possible. Pour cela nous avons décidé de nous tourner vers les dictionnaires. Ne pouvant pas utiliser les classes et les objets, les dictionnaires semblaient être la meilleur alternative.
 
-Nous avons donc décidé de rassembler les données en un seul dictionnaire : `GDict` où sont stockées toutes les données liées au jeu en lui-même, par exemple la pioche, l'état de la partie (terminée ou pas), etc. ainsi que toutes les informations liées aux joueurs et au croupier, comme le score actuel, ne nombre de victoires, la mise, etc.
+Nous avons donc décidé de rassembler les données en un seul dictionnaire : `GDict` où sont stockées toutes les données liées au jeu en lui-même, comme la pioche ou les stratégies de jeu ; ainsi que toutes les informations liées aux joueurs et au croupier, comme le score actuel, ne nombre de victoires, la mise, etc.
 
-Le dictionnaire prend la forme suivante :
+Le dictionnaire prend la forme suivante :
 
 ```py
 GDict = {
     'pioche': [],
+    'stratlist': ['alea', 'risk', 'safe', 'intel', 'croupNormal', 'croupFacile', 'croupDiff'],
+    'stratmiselist': ['miseAlea', 'miseFaible', 'miseForte'],
     'joueurs': {
         0: {
             'nom': '',
             'type': 0,
+            'strat': '',
+            'stratmise': '',
             'score': 0,
             'wallet': 100,
             'mise': 0,
@@ -106,25 +111,59 @@ GDict = {
 
 Les informations liées au joueur comme le score ne sont pas stockées dans un dictionnaire pour chaque, mais dans le dictionnaire personnel du joueur. Cela rallonge quelque peu l'écriture du code mais offre une bien plus grande flexibilité dans l'ajout futur de nouvelles informations.
 
-Les données joueurs sont :
+Les données joueurs sont :
 
-- `nom` : stocke le nom du joueur car la clé du dictionnaire n'est pas le nom mais un index (plus facile pour le déroulement du jeu)
-- `type` : stocke le type du joueur : soit humain (0), soit ordinateur (1)
-- `score` : stocke le score courant du joueur
-- `wallet` : stocke le portefeuille du joueur (initialisé à 100)
-- `mise` : stocke la mise courante du joueur
-- `ingame` : booléen définissant si le joueur est encore dans la partie et continue à piocher ou non
-- `blackjack` : booléen définissant si le joueur a effectué un Blackjack au premier tour (utile pour la répartition des mises)
-- `burst` : booléen définissant si le joueur a dépassé ou non le score de 21
+- `nom` : stocke le nom du joueur car la clé du dictionnaire n'est pas le nom mais un index (plus facile pour le déroulement du jeu)
+- `type` : stocke le type du joueur : soit humain (0), soit ordinateur (1)
+- `strat` : stocke la stratégie de jeu choisie pour le joueur ordinateur
+- `stratmise` : stocke la stratégie de choix de la mise choisie pour le joueur ordinateur
+- `score` : stocke le score courant du joueur
+- `wallet` : stocke le portefeuille du joueur (initialisé à 100)
+- `mise` : stocke la mise courante du joueur
+- `ingame` : booléen définissant si le joueur est encore dans la partie et continue à piocher ou non
+- `blackjack` : booléen définissant si le joueur a effectué un Blackjack au premier tour (utile pour la répartition des mises)
+- `burst` : booléen définissant si le joueur a dépassé ou non le score de 21
 
-À noter que le dictionnaire `victoires` n'est pas dans le dictionnaire du joueur : cela permet de potentiellement exporter le dictionnaire dans un fichier et pouvoir ré afficher le compte de victoires au nouveau lancement du programme.
+À noter que le dictionnaire `victoires` n'est pas dans le dictionnaire du joueur : cela permet de potentiellement exporter le dictionnaire dans un fichier et pouvoir ré afficher le compte de victoires au nouveau lancement du programme.
 
-Pour appeler une donnée dans une fonction particulière, seul les variables `GDict` et `GDict` sont nécessaires dans les paramètres. Une donnée s'appelle comme suit : `GDict['joueurs'][indexDuJoueur][cléDeLaDonnée]`. Les propriétés du dictionnaire permettent donc d'accéder facilement à toutes les données et d'être accédé via une boucle for, par ex :
+Pour appeler une donnée dans une fonction particulière, seul les variables `GDict` et `GDict` sont nécessaires dans les paramètres. Une donnée s'appelle comme suit : `GDict['joueurs'][indexDuJoueur][cléDeLaDonnée]`. Les propriétés du dictionnaire permettent donc d'accéder facilement à toutes les données et d'être accédé via une boucle for, par exemple :
 
 ```py
 for j in GDict['joueurs']:
     GDict['joueurs'][j]['scores'] = 0
 ```
+
+### <a name="filtration"></a> Filtration des inputs
+
+Lors du déroulement de la partie, le jeu interagit beaucoup avec l'utilisateur pour demander, soit le nombre de joueurs, soit la mise des joueurs, etc. Il est donc nécessaire de filtrer les données entrées par l'utilisateur afin de ne pas déclencher une erreur dans le programme.
+
+Pour ce qu'il sagit des entrées de texte, la méthode est assez simple, il suffit de faire une boucle `while` qui tourne tant que la réponse de l'utilisateur ne convient pas, comme par exemple :
+```py
+while True:
+    strat = input(s+" (o/n) : ")
+    if strat != 'o' and strat != 'n':
+        continue
+    else:
+        break
+```
+
+Pour les entrées de valeurs entières, comme la mise ou le nombre de joueur, trier devient plus complexe. En effet, la méthode simple comme ci-dessus ne convient pas car on ne peut pas vérifier facilement si une chaine de caractère est un entier correct ou non. Aussi, lorsque la fonction `int(input())` reçoit une valeur incorrecte, elle renvoie une erreur au lieu de simplement renvoyer `None`, ce qui a pour inconvénient de stopper le programme.
+
+Pour pallier à cela, nous avons utilisé une méthode que nous n'avons pas vu en cours : les erreurs et exceptions. Cela utilise en plus les instructions `try` et `except` :
+```py
+while True:
+    try:
+        nbjoueurs = int(input('Nombre de joueurs : '))
+    except:
+        print("Entrez une valeur correcte")
+        continue
+    if nbjoueurs <= 0:
+        continue
+    else:
+        break
+```
+
+Ces deux méthodes assez similaires font en sorte qu'aucune erreur ne soit déclenchée directement par l'utilisateur, ce qui est important notamment lors de la phase de testage du programme.
 
 ### <a name="fonctions"></a> Les fonctions de jeu
 
@@ -132,9 +171,9 @@ Le fonctionnement du jeu repose sur différentes fonctions créées dans le prog
 
 - `initPioche(n)` initialise une pioche composée de n paquets de 52 cartes, n étant le nombre de joueurs dans la partie. La pioche est mélangée avant d'être renvoyée grâce à la fonction `shuffle(pioche)`.
 
-- `initJoueurs(GDict, n)` initialise les joueurs et une partie des données le concernant dans le dictionnaire `GDict['joueurs']`. La fonction demande à l'utilisateur : le nom du joueur, son type, et sa stratégie de jeu.
+- `initJoueurs(GDict, n)` initialise les joueurs et une partie des données le concernant dans le dictionnaire `GDict['joueurs']`. La fonction demande à l'utilisateur : le nom du joueur, son type, et sa stratégie de jeu.
 
-- `initData(GDict, valeur, v=0)` est une fonction multi-usage qui est utilisée pour initialiser notamment les scores, les mises et les portefeuilles des joueurs. Le paramètre `v` est la valeur initialisée (par ex : 0 pour les scores ou 100 pour les portefeuilles).
+- `initData(GDict, valeur, v=0)` est une fonction multi-usage qui est utilisée pour initialiser notamment les scores, les mises et les portefeuilles des joueurs. Le paramètre `v` est la valeur initialisée (par ex : 0 pour les scores ou 100 pour les portefeuilles).
 
 - `initVictoires(GDict)` est une fonction similaire à la précédente qui ne marche que pour les victoires, comme elles sont dans un dictionnaire à part.
 
@@ -154,7 +193,7 @@ Les stratégies de pioches sont utilisées pour les joueurs ordinateur ou pour l
 
 - `continueHuman(j, GDict)` est la fonction de base qui interagie avec le joueur pour lui demander s'il veut continuer à piocher ou pas
 
-- `continueAlea(j,GDict)` ne prend aucun critère en compte et donne juste au hasard une réponse positive ou négative avec une probabilité de 0.5. C'est la forme la moins "intelligente" des fonctions de choix :
+- `continueAlea(j,GDict)` ne prend aucun critère en compte et donne juste au hasard une réponse positive ou négative avec une probabilité de 0.5. C'est la forme la moins "intelligente" des fonctions de choix :
 ```py
 def continueAlea(j,GDict):
     if choice([False, True]):
@@ -164,7 +203,7 @@ def continueAlea(j,GDict):
         print(GDict['joueurs'][j]['nom'], "ne pioche pas")
 ```
 
-- `continuePara(j,GDict,p=0.5)` est similaire à la fonction précédente, mais les choix ont une probabilité différente (même si la probabilité par défaut est 0.5, ce qui revient à exactement la fonction précédente). Ce choix pondéré est effectué grâce au module numpy.random :
+- `continuePara(j,GDict,p=0.5)` est similaire à la fonction précédente, mais les choix ont une probabilité différente (même si la probabilité par défaut est 0.5, ce qui revient à exactement la fonction précédente). Ce choix pondéré est effectué grâce au module numpy.random :
 ```py
 def continuePara(j,GDict,p=0.5):
     if nprd.choice([False, True], p=[1-p, p]):
@@ -174,7 +213,7 @@ def continuePara(j,GDict,p=0.5):
         print(GDict['joueurs'][j]['nom'], "ne pioche pas")
 ```
 
-- `continueIntel(j,GDict,p=0.5)` se base sur le score du joueur pour en tirer une probabilité qui est en suite injectée dans `continuePara()`. C'est la technique la plus "complexe" car elle rassemble le plus de paramètres, mais ça n'es pas forcément la plus logique ni la meilleure stratégie :
+- `continueIntel(j,GDict,p=0.5)` se base sur le score du joueur pour en tirer une probabilité qui est en suite injectée dans `continuePara()`. C'est la technique la plus "complexe" car elle rassemble le plus de paramètres, mais ça n'es pas forcément la plus logique ni la meilleure stratégie :
 ```py
 def continueIntel(j,GDict):
     if GDict['joueurs'][j]['score'] <= 10:
@@ -185,7 +224,7 @@ def continueIntel(j,GDict):
         p = 0
     continuePara(j,GDict,p)
 ```
-- `continueCroupier(GDict)` est la méthode utilisée dans la plupart des casinos quand il s'agit de faire piocher le croupier. Tant que son score est inférieur à 17, le croupier continue à piocher, sinon il s'arrête. C'est la méthode imposée au croupier de notre programme :
+- `continueCroupier(GDict)` est la méthode utilisée dans la plupart des casinos quand il s'agit de faire piocher le croupier. Tant que son score est inférieur à 17, le croupier continue à piocher, sinon il s'arrête. C'est la méthode imposée au croupier de notre programme :
 ```py
 def continueCroupier(GDict):
     if GDict['croupier']['score'] < 17:
@@ -194,7 +233,7 @@ def continueCroupier(GDict):
         GDict['croupier']['ingame'] = False
         print("\nLe croupier ne pioche pas")
 ```
-- `continueCroupNormal(GDict)` est la même methode utilisé dans la fonction précédente, cependant elle est appliquée à un joueur qui voudrait jouer comme le croupier :
+- `continueCroupNormal(GDict)` est la même methode utilisé dans la fonction précédente, cependant elle est appliquée à un joueur qui voudrait jouer comme le croupier :
 ```py
 def continueCroupNormal(j, GDict):
     if GDict['joueurs'][j]['score'] < 17:
@@ -203,7 +242,7 @@ def continueCroupNormal(j, GDict):
         GDict['joueurs'][j]['ingame'] = False
         print(GDict['joueurs'][j]['nom'], "ne pioche pas")
 ```
-- `continueCroupFacile(j,GDict)` est la fonction qui definit un joueur qui ne pioche que quand sa main a une valeur strictement inférieure à 16. C'est donc un moyen simple et sécurisé de piocher :
+- `continueCroupFacile(j,GDict)` est la fonction qui definit un joueur qui ne pioche que quand sa main a une valeur strictement inférieure à 16. C'est donc un moyen simple et sécurisé de piocher :
 ```py
 def continueCroupFacile(j, GDict):
     if GDict['joueurs'][j]['score'] < 16:
@@ -212,7 +251,7 @@ def continueCroupFacile(j, GDict):
         GDict['joueurs'][j]['ingame'] = False
         print(GDict['joueurs'][j]['nom'], "ne pioche pas")
 ```
-- `continueCroupDifficile(j,GDict)` fonctionne comme celle au dessus mais avec une valeur de main plus élevée avant d'arrêter de piocher. C'est plus risqué mais paut parfois permettre de vaincre le croupier :
+- `continueCroupDifficile(j,GDict)` fonctionne comme celle au dessus mais avec une valeur de main plus élevée avant d'arrêter de piocher. C'est plus risqué mais paut parfois permettre de vaincre le croupier :
 ```py
 def continueCroupDifficile(j, GDict):
     if GDict['joueurs'][j]['score'] < 19:
@@ -224,7 +263,7 @@ def continueCroupDifficile(j, GDict):
 
 ### <a name="mises"></a> Stratégies de choix de la mise
 
-Le fonctionnement des mises demandé ne correspond pas du tout au fonctionnement des mises du Blackjack classique, faisant jouer les joueurs contre eux et non contre le croupier. C'est pourquoi nous avons décidé de revoir le système avec les règles suivantes :
+Le fonctionnement des mises demandé ne correspond pas du tout au fonctionnement des mises du Blackjack classique, faisant jouer les joueurs contre eux et non contre le croupier. C'est pourquoi nous avons décidé de revoir le système avec les règles suivantes :
 
 - Le croupier ne mise pas et comme il représente le casino, il a une ressource "infinie" d'OtterCoins
 
@@ -240,12 +279,12 @@ Le fonctionnement des mises demandé ne correspond pas du tout au fonctionnement
 
 De même que les stratégie de pioche, les stratégies de mises peuvent être choisies au moment de l'inscription du joueur ordinateur dans le dictionnaire. Elles déterminenent donc combien d'OtterCoins le joueur va miser en fonction de différents critères.
 
-- `miseAlea(j, Gdict)` effectue un choix de la mise aléatoirement entre 1 et le portefeuille du joueur :
+- `miseAlea(j, Gdict)` effectue un choix de la mise aléatoirement entre 1 et le portefeuille du joueur :
 ```py
 def miseAlea(j, Gdict):
     return randint(1, floor(Gdict['joueurs'][j]['wallet']))
 ```
-- `miseFaible(j, Gdict)` effectue un choix de la mise dite "Faible", car il effectue son choix afin qu'elle soit inférieur au quart du portefeuille du joueur :
+- `miseFaible(j, Gdict)` effectue un choix de la mise dite "Faible", car il effectue son choix afin qu'elle soit inférieur au quart du portefeuille du joueur :
 ```py
 def miseFaible(j,GDict):
     mise = randint(1 ,floor(GDict['joueurs'][j]['wallet']))
@@ -253,9 +292,9 @@ def miseFaible(j,GDict):
         mise = randint(1 ,floor(GDict['joueurs'][j]['wallet']))
     return mise
 ```
-- `miseAlea(j, Gdict)` effectue un choix de la mise dite "Forte", car il effectue son choix afin qu'elle soit supérieure au trois quart du portefeuille du joueur :
+- `miseAlea(j, Gdict)` effectue un choix de la mise dite "Forte", car il effectue son choix afin qu'elle soit supérieure au trois quart du portefeuille du joueur :
 ```py
-def miseForte(j,GDict) :
+def miseForte(j,GDict):
     mise = randint(1 ,floor(GDict['joueurs'][j]['wallet']))
     while mise <((3/4)*(GDict['joueurs'][j]['wallet'])):
         mise = randint(1 ,floor(GDict['joueurs'][j]['wallet']))
