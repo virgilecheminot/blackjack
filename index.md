@@ -264,6 +264,8 @@ def miseForte(j,GDict) :
 
 ### Tournoi automatique et comparaison des stratégies
 
+Nous allons à présent étudier différentes possibilités de jeux, afin de voir quelle(s) stratégie(s) de mises et/ou de pioches sont les meilleurs pour gagner face au croupier.
+
 (partie à venir)
 
 ### Interface graphique du jeu 
