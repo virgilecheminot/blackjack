@@ -184,6 +184,33 @@ def continueCroupier(GDict):
         GDict['croupier']['ingame'] = False
         print("\nLe croupier ne pioche pas")
 ```
+- `continueCroupNormal(GDict)` est la même methode utilisé dans la fonction précédente, cependant elle est appliquée à un joueur qui voudrait jouer comme le croupier :
+```py
+def continueCroupNormal(j, GDict):
+    if GDict['joueurs'][j]['score'] < 17:
+        GDict['joueurs'][j]['ingame'] = True
+    else:
+        GDict['joueurs'][j]['ingame'] = False
+        print(GDict['joueurs'][j]['nom'], "ne pioche pas")
+```
+- `continueCroupFacil(j,GDict)`est la fonction qui definit un joueur qui ne pioche au dessus d'une certaine valeur de main:
+```py
+def continueCroupFacil(j, GDict):
+    if GDict['joueurs'][j]['score'] < 15:
+        GDict['joueurs'][j]['ingame'] = True
+    else:
+        GDict['joueurs'][j]['ingame'] = False
+        print(GDict['joueurs'][j]['nom'], "ne pioche pas")
+```
+- `continueCroupDifficile(j,GDict)`fonctionne comme celle au dessus mais avec un nombre de main plus grand avant d'arreter de piocher :
+```py
+def continueCroupDifficile(j, GDict):
+    if GDict['joueurs'][j]['score'] < 19:
+        GDict['joueurs'][j]['ingame'] = True
+    else:
+        GDict['joueurs'][j]['ingame'] = False
+        print(GDict['joueurs'][j]['nom'], "ne pioche pas")
+```
 ### <a name="mises"></a> Stratégies de choix de la mise
 
 Le fonctionnement des mises demandé ne correspond pas du tout au fonctionnement des mises du Blackjack classique, faisant jouer les joueurs contre eux et non contre le croupier. C'est pourquoi nous avons décidé de revoir le système avec les règles suivantes :
