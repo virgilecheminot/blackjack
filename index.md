@@ -8,7 +8,7 @@ Lors de la création du programme nous avons ajouté progressivements certaines 
 
 - #### [Déroulement de base du jeu](#deroulement)
 - #### [Structure des données de jeu](#structure)
-- #### [Filtration des inputs](#filtration)
+- #### [Filtrage des inputs](#Filtrage)
 - #### [Les fonctions de jeu](#fonctions)
 - #### [Stratégies de pioche](#pioche)
 - #### [Stratégies de choix de la mise](#mises)
@@ -133,7 +133,7 @@ for j in GDict['joueurs']:
     GDict['joueurs'][j]['scores'] = 0
 ```
 
-### <a name="filtration"></a> Filtration des inputs
+### <a name="Filtrage"></a> Filtrage des inputs
 
 Lors du déroulement de la partie, le jeu interagit beaucoup avec l'utilisateur pour demander, soit le nombre de joueurs, soit la mise des joueurs, etc. Il est donc nécessaire de filtrer les données entrées par l'utilisateur afin de ne pas déclencher une erreur dans le programme.
 
@@ -292,7 +292,7 @@ def miseFaible(j,GDict):
         mise = randint(1 ,floor(GDict['joueurs'][j]['wallet']))
     return mise
 ```
-- `miseAlea(j, Gdict)` effectue un choix de la mise dite "Forte", car il effectue son choix afin qu'elle soit supérieure au trois quart du portefeuille du joueur :
+- `miseForte(j, Gdict)` effectue un choix de la mise dite "Forte", car il effectue son choix afin qu'elle soit supérieure au trois quart du portefeuille du joueur :
 ```py
 def miseForte(j,GDict):
     mise = randint(1 ,floor(GDict['joueurs'][j]['wallet']))
