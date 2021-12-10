@@ -158,6 +158,7 @@ while True:
         print("Entrez une valeur correcte")
         continue
     if nbjoueurs <= 0:
+        print("Le nombre de joueurs doit être supérieur à 0")
         continue
     else:
         break
