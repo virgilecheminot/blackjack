@@ -1,4 +1,6 @@
+<head>
 <link rel="shortcut icon" type="image/png" href="https://virgile.tech/assets/img/icon.png">
+</head>
 
 ## Jeu du Backjack
 
