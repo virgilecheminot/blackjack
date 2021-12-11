@@ -170,6 +170,8 @@ Ces deux méthodes assez similaires font en sorte qu'aucune erreur ne soit décl
 
 Le fonctionnement du jeu repose sur différentes fonctions créées dans le programme [`blackjack.py`](https://github.com/virgilecheminot/blackjack/blob/master/blackjack.py). Mise à part les fonctions de déroulement de jeu, elles servent à tout ce qui est gestion du jeu et calcul de différentes variables et données.
 
+- [`paquet()`] retourne un paquet standard de 52 cartes ordonné par couleurs et par valeurs.
+
 - [`initPioche(n)`](https://github.com/virgilecheminot/blackjack/blob/master/blackjack.py#L44) initialise une pioche composée de n paquets de 52 cartes, n étant le nombre de joueurs dans la partie. La pioche est mélangée avant d'être renvoyée grâce à la fonction `shuffle(pioche)`.
 
 - [`initJoueurs(GDict, n)`](https://github.com/virgilecheminot/blackjack/blob/master/blackjack.py#L53) initialise les joueurs et une partie des données le concernant dans le dictionnaire `GDict['joueurs']`. La fonction demande à l'utilisateur : le nom du joueur, son type, et sa stratégie de jeu.
