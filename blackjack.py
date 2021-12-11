@@ -7,23 +7,8 @@ from numpy import random as nprd
 
 ## INITIALISATIONS DIVERSES ##
 
-def paquet():
-    return [
-        'as de trefle', 'as de carreau', 'as de coeur', 'as de pic',
-        '2 de trefle', '2 de carreau', '2 de coeur', 'as de pic',
-        '3 de trefle', '3 de carreau', '3 de coeur', '3 de pic',
-        '4 de trefle', '4 de carreau', '4 de coeur', '4 de pic',
-        '5 de trefle', '5 de carreau', '5 de coeur', '5 de pic',
-        '6 de trefle', '6 de carreau', '6 de coeur', '6 de pic',
-        '7 de trefle', '7 de carreau', '7 de coeur', '7 de pic',
-        '8 de trefle', '8 de carreau', '8 de coeur', '8 de pic',
-        '9 de trefle', '9 de carreau', '9 de coeur', '9 de pic',
-        '10 de trefle', '10 de carreau', '10 de coeur', '10 de pic',
-        'valet de trefle', 'valet de carreau', 'valet de coeur', 'valet de pic',
-        'dame de trefle', 'dame de carreau', 'dame de coeur', 'dame de pic',
-        'roi de trefle', 'roi de carreau', 'roi de coeur', 'roi de pic'
-    ]
-
+couleurs = ['pique', 'trèfle', 'cœur', 'carreau']
+values = ['As', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Valet', 'Dame', 'Roi']
 
 ValCartes = {
     '2': 2,
@@ -35,10 +20,18 @@ ValCartes = {
     '8': 8,
     '9': 9,
     '10': 10,
-    'valet': 10,
-    'dame': 10,
-    'roi': 10
+    'Valet': 10,
+    'Dame': 10,
+    'Roi': 10
 }
+
+
+def paquet():
+    paquet = []
+    for c in couleurs:
+        for v in values:
+            paquet.append(f"{v} de {c}")
+    return paquet
 
 
 def initPioche(n):
