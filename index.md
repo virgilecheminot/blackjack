@@ -323,4 +323,4 @@ On remarque aussi, que qu'importe la stratégie, le gain est toujours négatif e
 
 ### <a name="interface"></a> Interface graphique du jeu
 
-(à venir)
+[Lien du jeu](./interface/index.html)
