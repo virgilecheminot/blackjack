@@ -1,7 +1,3 @@
-<head>
-<link rel="shortcut icon" type="image/png" href="https://virgile.tech/assets/img/icon.png">
-</head>
-
 ## Jeu du Backjack
 
 Ce jeu de Blackjack est un travail de groupe réalisé pour l'université dans le carde d'un projet de fin de semestre en INF101. Le but était de créer un jeu de Blackjack fonctionnel et se rapprochant le plus possible d'un jeu de Blackjack réel. 
