@@ -3,10 +3,13 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    padding: auto;
+    margin: 0;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -33,25 +36,23 @@ h1, h2, h3 {
     margin-right: 2.5rem;
 }
 
-#player-score-zone {
+#player-score-zone,
+#player-score-zone-resume {
     display: flex;
     flex-wrap: wrap;
 }
 
-#player-score-zone div {
+#player-score-zone div,
+#player-score-zone-resume div {
     margin-left: 2.5rem;
     margin-right: 2.5rem;
 }
 
 footer {
-    clear: both;
-    background: rgb(255, 255, 255);
-    color: rgb(0, 0, 0);
     text-align: center;
     vertical-align: middle;
     margin: 0;
-    position: fixed;
-    bottom: 0px;
     width: 100%;
+    font-size: 1rem;
     font-family: Arial, Helvetica, sans-serif;
 }
