@@ -323,6 +323,8 @@ On remarque aussi, que qu'importe la stratégie, le gain est toujours négatif e
 
 ### <a name="interface"></a> Interface graphique du jeu
 
-La partie interface graphique du jeu étant optionnelle, nous avons décidé de ne pas nous attarder sur python qui n'est pas du tout un langage adapté pour cela. Nous avons eu donc l'idée de se baser sur le fonctionnement des sites web et de coder le jeu en html, css et JavaScript. Ce dernier étant le langage principal du fonctionnement du jeu. La création d'un programme en JavaScript est assez simple et similaire à Python, mais nous avons rencontré tout de même certaines difficultés lors du codage.
+La partie interface graphique du jeu étant optionnelle, nous avons décidé de ne pas nous attarder sur python qui n'est pas du tout un langage adapté pour cela. Nous avons eu donc l'idée de se baser sur le fonctionnement des sites web et de coder le jeu en html, css et JavaScript. Ce dernier étant le langage principal du fonctionnement du jeu.
+
+La création d'un programme en JavaScript est assez simple et similaire à Python, mais nous avons rencontré tout de même certaines difficultés lors de la programmation.
 
 [Lien du jeu](./interface/index.html)
