@@ -69,7 +69,7 @@ def initVictoires(GDict):
 
 def valeurCartes(carte, score):
     carte_WO_couleur = carte.split()[0]
-    if carte_WO_couleur == 'as':
+    if carte_WO_couleur == 'As':
         return valeurAs(score)
     else:
         return ValCartes[carte_WO_couleur]
