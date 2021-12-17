@@ -78,6 +78,7 @@ def initJoueurs(GDict, n):
             print("Choix de la straégie joueur :")
             print(GDict['stratlist'])
             while True:
+                strat = ''
                 for s in GDict['stratlist']:
                     while True:
                         strat = input(s+" (o/n) : ")
