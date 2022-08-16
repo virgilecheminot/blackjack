@@ -73,7 +73,7 @@ Les différentes parties distinctes du jeu sont exécutées avec les fonctions s
 
 ### <a name="structure"></a> Structure des données de jeu
 
-L'enjeu majeur de ce programme était de savoir comment stocker les données de jeu et poucoir y accéder facilement avant, durant et après la partie et pouvoir les modifier le plus facilement possible. Pour cela nous avons décidé de nous tourner vers les dictionnaires. Ne pouvant pas utiliser les classes et les objets, les dictionnaires semblaient être la meilleur alternative.
+L'enjeu majeur de ce programme était de savoir comment stocker les données de jeu et pouvoir y accéder facilement avant, durant et après la partie et pouvoir les modifier le plus facilement possible. Pour cela nous avons décidé de nous tourner vers les dictionnaires. Ne pouvant pas utiliser les classes et les objets, les dictionnaires semblaient être la meilleur alternative.
 
 Nous avons donc décidé de rassembler les données en un seul dictionnaire : `GDict` où sont stockées toutes les données liées au jeu en lui-même, comme la pioche ou les stratégies de jeu ; ainsi que toutes les informations liées aux joueurs et au croupier, comme le score actuel, ne nombre de victoires, la mise, etc.
 
